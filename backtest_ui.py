@@ -3,7 +3,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, Clock, StringProperty
 from kivy.lang import Builder
-from backtest import TestRun
+from backtest import BackTestClass
 from math import sin
 from kivy_garden.graph import Graph, MeshLinePlot
 
@@ -48,7 +48,7 @@ class MyLayout(Widget):
     txt = StringProperty('Press Start Button')
     txt2 = StringProperty('Plotting using graph in Kivy')
     btn_txt = StringProperty('Start')
-    tst = TestRun()
+    tst = BackTestClass()
     first_run = True
     # child_conn = Pipe()
     # process = Process(target=tst.test_run_con, args=(child_conn,))
