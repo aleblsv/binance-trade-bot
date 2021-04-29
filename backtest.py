@@ -5,6 +5,7 @@ from binance_trade_bot import backtest
 class TestRun:
     def __init__(self):
         self.is_running = 0
+        self.stop = 0
         self.status = "Not Running"
 
     def test_run_con(self, con):
@@ -12,6 +13,7 @@ class TestRun:
 
     def test_run(self):
         self.is_running = 1
+        self.stop = 0
         history = []
         self.status = "Running"
 
@@ -28,7 +30,9 @@ class TestRun:
             print(f"{manager.config.BRIDGE.symbol} VALUE:", bridge_value, f"({bridge_diff}%)")
             print("------")
             self.status = f'VALUE: {bridge_value}'
-        self.is_running = 1
+            if self.stop:
+                break
+        self.is_running = 0
 
 
 if __name__ == "__main__":
