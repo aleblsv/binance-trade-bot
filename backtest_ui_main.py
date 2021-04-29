@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
 
     def data_callback_func(self, value):
         print("Add data: " + str(value))
-        self.fig.addData(value)
+        # self.fig.addData(value)
         return
 
     def label_set_text_cb(self, value):
@@ -52,6 +52,9 @@ class MainWindow(QMainWindow):
         self.ui.label_status.setText(f'Time: {v_arr[0]}')
         self.ui.label_status2.setText(f'BTC: {v_arr[1]}')
         self.ui.label_status3.setText(f'USD: {v_arr[2]}')
+        f = float(v_arr[2])
+        print(f)
+        self.fig.addData(f)
         return
 
     def __init__(self):
@@ -310,7 +313,7 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
         b.append(4.0)
         b.append(3.0)
         b.append(4.0)
-        self.y = (self.n * 0.0) + 50
+        self.y = (self.n * 0.0) + 100
         # The window
         self.fig = Figure(figsize=(5, 5), dpi=100)
         self.ax1 = self.fig.add_subplot(111)
@@ -324,7 +327,7 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
         self.ax1.add_line(self.line1_tail)
         self.ax1.add_line(self.line1_head)
         self.ax1.set_xlim(0, self.xlim - 1)
-        self.ax1.set_ylim(0, 100)
+        self.ax1.set_ylim(0, 300)
         FigureCanvas.__init__(self, self.fig)
         TimedAnimation.__init__(self, self.fig, interval=50, blit=True)
         return
