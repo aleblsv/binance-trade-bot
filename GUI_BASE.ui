@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>900</height>
+    <width>1200</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -1621,7 +1621,7 @@ QPushButton:pressed {
                           <property name="font">
                            <font>
                             <family>Segoe UI</family>
-                            <pointsize>24</pointsize>
+                            <pointsize>20</pointsize>
                            </font>
                           </property>
                           <property name="styleSheet">
@@ -1643,7 +1643,7 @@ QPushButton:pressed {
                           <property name="font">
                            <font>
                             <family>Segoe UI</family>
-                            <pointsize>26</pointsize>
+                            <pointsize>20</pointsize>
                            </font>
                           </property>
                           <property name="styleSheet">
@@ -1665,7 +1665,7 @@ QPushButton:pressed {
                           <property name="font">
                            <font>
                             <family>Segoe UI</family>
-                            <pointsize>26</pointsize>
+                            <pointsize>20</pointsize>
                            </font>
                           </property>
                           <property name="styleSheet">
@@ -2013,7 +2013,7 @@ QScrollBar:horizontal {
                              <rect>
                               <x>0</x>
                               <y>0</y>
-                              <width>274</width>
+                              <width>218</width>
                               <height>218</height>
                              </rect>
                             </property>

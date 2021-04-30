@@ -42,7 +42,7 @@ import threading
 class MainWindow(QMainWindow):
 
     def data_callback_func(self, value):
-        print("Add data: " + str(value))
+        # print("Add data: " + str(value))
         # self.fig.addData(value)
         return
 
@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
         ## ==> END ##
 
         ## WINDOW SIZE ==> DEFAULT SIZE
-        startSize = QSize(1000, 720)
+        startSize = QSize(1200, 900)
         self.resize(startSize)
         self.setMinimumSize(startSize)
         # UIFunctions.enableMaximumSize(self, 500, 720)
@@ -315,19 +315,20 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
         b.append(4.0)
         self.y = (self.n * 0.0) + 100
         # The window
-        self.fig = Figure(figsize=(5, 5), dpi=100)
+        self.fig = Figure(figsize=(5, 5), facecolor='xkcd:gray', dpi=100)
         self.ax1 = self.fig.add_subplot(111)
         # self.ax1 settings
         self.ax1.set_xlabel('time')
-        self.ax1.set_ylabel('raw data')
+        self.ax1.set_ylabel('USD')
         self.line1 = Line2D([], [], color='blue')
-        self.line1_tail = Line2D([], [], color='red', linewidth=2)
+        self.line1_tail = Line2D([], [], color='red', linewidth=1)
         self.line1_head = Line2D([], [], color='red', marker='o', markeredgecolor='r')
         self.ax1.add_line(self.line1)
         self.ax1.add_line(self.line1_tail)
         self.ax1.add_line(self.line1_head)
         self.ax1.set_xlim(0, self.xlim - 1)
-        self.ax1.set_ylim(0, 300)
+        # self.ax1.set_ylim(0, 300)
+        self.ax1.set_ylim(90, 110, auto=True)
         FigureCanvas.__init__(self, self.fig)
         TimedAnimation.__init__(self, self.fig, interval=50, blit=True)
         return

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'GUI_BASEoxYlaJ.ui'
+## Form generated from reading UI file 'GUI_BASEojLXxE.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.14.1
 ##
@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1000, 900)
+        MainWindow.resize(1200, 1000)
         MainWindow.setMinimumSize(QSize(1000, 720))
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
@@ -736,7 +736,7 @@ class Ui_MainWindow(object):
         self.label_status.setObjectName(u"label_status")
         font7 = QFont()
         font7.setFamily(u"Segoe UI")
-        font7.setPointSize(24)
+        font7.setPointSize(20)
         self.label_status.setFont(font7)
         self.label_status.setStyleSheet(u"QLabel {\n"
 "	border-radius: 10px;\n"
@@ -750,10 +750,7 @@ class Ui_MainWindow(object):
 
         self.label_status2 = QLabel(self.page_home)
         self.label_status2.setObjectName(u"label_status2")
-        font8 = QFont()
-        font8.setFamily(u"Segoe UI")
-        font8.setPointSize(26)
-        self.label_status2.setFont(font8)
+        self.label_status2.setFont(font7)
         self.label_status2.setStyleSheet(u"QLabel {\n"
 "	border-radius: 10px;\n"
 "	background-color: rgb(44, 49, 60);\n"
@@ -766,7 +763,7 @@ class Ui_MainWindow(object):
 
         self.label_status3 = QLabel(self.page_home)
         self.label_status3.setObjectName(u"label_status3")
-        self.label_status3.setFont(font8)
+        self.label_status3.setFont(font7)
         self.label_status3.setStyleSheet(u"QLabel {\n"
 "	border-radius: 10px;\n"
 "	background-color: rgb(44, 49, 60);\n"
@@ -858,10 +855,10 @@ class Ui_MainWindow(object):
         self.pushButton = QPushButton(self.frame_content_wid_1)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setMinimumSize(QSize(150, 30))
-        font9 = QFont()
-        font9.setFamily(u"Segoe UI")
-        font9.setPointSize(9)
-        self.pushButton.setFont(font9)
+        font8 = QFont()
+        font8.setFamily(u"Segoe UI")
+        font8.setPointSize(9)
+        self.pushButton.setFont(font8)
         self.pushButton.setStyleSheet(u"QPushButton {\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
 "	border-radius: 5px;	\n"
@@ -972,7 +969,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 274, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 218, 218))
         self.horizontalLayout_11 = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
         self.plainTextEdit = QPlainTextEdit(self.scrollAreaWidgetContents)
@@ -1001,7 +998,7 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.setObjectName(u"comboBox")
-        self.comboBox.setFont(font9)
+        self.comboBox.setFont(font8)
         self.comboBox.setAutoFillBackground(False)
         self.comboBox.setStyleSheet(u"QComboBox{\n"
 "	background-color: rgb(27, 29, 35);\n"

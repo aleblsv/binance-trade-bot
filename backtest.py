@@ -15,7 +15,7 @@ class BackTestClass:
             history.append((btc_value, bridge_value))
             btc_diff = round((btc_value - history[0][0]) / history[0][0], 3)
             bridge_diff = round((bridge_value - history[0][1]) / history[0][1], 3)
-            val_cb = f'{manager.datetime}&{btc_value}&{bridge_value}'
+            val_cb = f'{manager.datetime}&{btc_value:.3f}&{bridge_value:.3f}'
             print("------")
             print("TIME:", manager.datetime)
             print("BALANCES:", manager.balances)
