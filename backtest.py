@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from binance_trade_bot import backtest
 
@@ -8,6 +9,12 @@ class BackTestClass:
         self._cb = cb
 
     def run(self):
+        # for i in range(100):
+        #     print(i)
+        #     val_cb = f'2021&{i}&{i}'
+        #     self._cb(val_cb)
+        #     time.sleep(1)
+
         history = []
         for manager in backtest(datetime(2021, 1, 1), datetime.now()):
             btc_value = manager.collate_coins("BTC")
@@ -27,6 +34,10 @@ class BackTestClass:
                 break
 
 
+def print_cb(s):
+    print(s)
+
+
 if __name__ == "__main__":
-    t = BackTestClass()
+    t = BackTestClass(print_cb)
     t.run()

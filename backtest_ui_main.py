@@ -15,12 +15,13 @@
 ################################################################################
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime, QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt, QEvent, Signal, Slot)
+                            QSize, QTime, QUrl, Qt, QEvent, Signal, Slot, QTimer)
 from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase, QIcon, QKeySequence,
                            QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
 # GUI FILE
+
 from app_modules import *
 
 import platform
@@ -35,11 +36,31 @@ from matplotlib.figure import Figure
 from matplotlib.animation import TimedAnimation
 from matplotlib.lines import Line2D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import time
 import threading
+import random
+
+MAX_POINTS = 20
 
 
 class MainWindow(QMainWindow):
+    dataChanged = Signal(list)
+
+    def new_loop(self):
+        # self.data = []
+        # for i in range(10):
+        v = random.randint(0, 10)
+        self.data.append(v)
+        # if len(self.data) < MAX_POINTS:
+        #     self.data.append(v)
+        # else:
+        #     self.data.pop(0)
+        #     self.data.append(v)
+        # Send data to graph
+        self.dataChanged.emit(self.data)
+        # LOOP repeater
+        QTimer.singleShot(1000, self.new_loop)
 
     def data_callback_func(self, value):
         # print("Add data: " + str(value))
@@ -54,7 +75,8 @@ class MainWindow(QMainWindow):
         self.ui.label_status3.setText(f'USD: {v_arr[2]}')
         f = float(v_arr[2])
         print(f)
-        self.fig.addData(f)
+        self.data.append(f)
+        self.dataChanged.emit(self.data)
         return
 
     def __init__(self):
@@ -66,6 +88,8 @@ class MainWindow(QMainWindow):
         print('System: ' + platform.system())
         print('Version: ' + platform.release())
 
+        # Data to be visualized
+        self.data = []
         ########################################################################
         ## START - WINDOW ATTRIBUTES
         ########################################################################
@@ -101,11 +125,13 @@ class MainWindow(QMainWindow):
         UIFunctions.addNewMenu(self, "Custom Widgets", "btn_widgets", "url(:/16x16/icons/16x16/cil-equalizer.png)",
                                False)
 
-        self.fig = CustomFigCanvas()
+        # self.fig = CustomFigCanvas()
+        self.fig = MatplotlibWidget()
+        self.dataChanged.connect(self.fig.update_plot)
         self.ui.verticalLayout_graph.addWidget(self.fig)
-        myDataLoop = threading.Thread(name='myDataLoop', target=dataSendLoop, daemon=True,
-                                      args=(self.data_callback_func,))
-        myDataLoop.start()
+        # myDataLoop = threading.Thread(name='myDataLoop', target=dataSendLoop, daemon=True,
+        #                               args=(self.data_callback_func,))
+        # myDataLoop.start()
 
         t_ext = TestExe()
         lebal_loop = threading.Thread(target=t_ext.label_loop, daemon=True, args=(self.label_set_text_cb,))
@@ -251,38 +277,12 @@ class MainWindow(QMainWindow):
     ############################## ---/--/--- ##############################
 
 
-# You need to setup a signal slot mechanism, to
-# send data to your GUI in a thread-safe way.
-# Believe me, if you don't do this right, things
-# go very very wrong..
 class Communicate(QObject):
     data_signal = Signal(float)
 
 
 class CommunicateStr(QObject):
     data_signal = Signal(str)
-
-
-''' End Class '''
-
-
-def dataSendLoop(addData_callbackFunc):
-    # Setup the signal-slot mechanism.
-    mySrc = Communicate()
-    mySrc.data_signal.connect(addData_callbackFunc)
-
-    # Simulate some data
-    n = np.linspace(0, 499, 500)
-    y = 50 + 25 * (np.sin(n / 8.3)) + 10 * (np.sin(n / 7.5)) - 5 * (np.sin(n / 1.5))
-    i = 0
-
-    while (True):
-        if (i > 499):
-            i = 0
-        time.sleep(0.1)
-        mySrc.data_signal.emit(y[i])  # <- Here you emit a signal!
-        i += 1
-    ###
 
 
 class TestExe:
@@ -298,87 +298,27 @@ class TestExe:
         self.com.data_signal.emit(val)
 
 
-class CustomFigCanvas(FigureCanvas, TimedAnimation):
-    def __init__(self):
-        self.addedData = []
-        print(matplotlib.__version__)
-        # The data
-        self.xlim = 200
-        self.n = np.linspace(0, self.xlim - 1, self.xlim)
-        a = []
-        b = []
-        a.append(2.0)
-        a.append(4.0)
-        a.append(2.0)
-        b.append(4.0)
-        b.append(3.0)
-        b.append(4.0)
-        self.y = (self.n * 0.0) + 100
-        # The window
-        self.fig = Figure(figsize=(5, 5), facecolor='xkcd:gray', dpi=100)
-        self.ax1 = self.fig.add_subplot(111)
-        # self.ax1 settings
-        self.ax1.set_xlabel('time')
-        self.ax1.set_ylabel('USD')
-        self.line1 = Line2D([], [], color='blue')
-        self.line1_tail = Line2D([], [], color='red', linewidth=1)
-        self.line1_head = Line2D([], [], color='red', marker='o', markeredgecolor='r')
-        self.ax1.add_line(self.line1)
-        self.ax1.add_line(self.line1_tail)
-        self.ax1.add_line(self.line1_head)
-        self.ax1.set_xlim(0, self.xlim - 1)
-        # self.ax1.set_ylim(0, 300)
-        self.ax1.set_ylim(90, 110, auto=True)
-        FigureCanvas.__init__(self, self.fig)
-        TimedAnimation.__init__(self, self.fig, interval=50, blit=True)
-        return
+class MatplotlibWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
-    def new_frame_seq(self):
-        return iter(range(self.n.size))
+        fig = Figure(figsize=(5, 5), facecolor='xkcd:gray', dpi=65, edgecolor=(0, 0, 0))
+        self.canvas = FigureCanvas(fig)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+        lay = QVBoxLayout(self)
+        lay.addWidget(self.toolbar)
+        lay.addWidget(self.canvas)
 
-    def _init_draw(self):
-        lines = [self.line1, self.line1_tail, self.line1_head]
-        for l in lines:
-            l.set_data([], [])
-        return
+        self.ax = fig.add_subplot(111)
+        self.line, *_ = self.ax.plot([])
+        # self.ax.set_xlim(0, MAX_POINTS)
 
-    def addData(self, value):
-        self.addedData.append(value)
-        return
-
-    def zoomIn(self, value):
-        bottom = self.ax1.get_ylim()[0]
-        top = self.ax1.get_ylim()[1]
-        bottom += value
-        top -= value
-        self.ax1.set_ylim(bottom, top)
-        self.draw()
-        return
-
-    def _step(self, *args):
-        # Extends the _step() method for the TimedAnimation class.
-        try:
-            TimedAnimation._step(self, *args)
-        except Exception as e:
-            self.abc += 1
-            print(str(self.abc))
-            TimedAnimation._stop(self)
-            pass
-        return
-
-    def _draw_frame(self, framedata):
-        margin = 2
-        while len(self.addedData) > 0:
-            self.y = np.roll(self.y, -1)
-            self.y[-1] = self.addedData[0]
-            del (self.addedData[0])
-
-        self.line1.set_data(self.n[0: self.n.size - margin], self.y[0: self.n.size - margin])
-        self.line1_tail.set_data(np.append(self.n[-10:-1 - margin], self.n[-1 - margin]),
-                                 np.append(self.y[-10:-1 - margin], self.y[-1 - margin]))
-        self.line1_head.set_data(self.n[-1 - margin], self.y[-1 - margin])
-        self._drawn_artists = [self.line1, self.line1_tail, self.line1_head]
-        return
+    @Slot(list)
+    def update_plot(self, data):
+        self.line.set_data(range(len(data)), data)
+        self.ax.set_xlim(0, len(data))
+        self.ax.set_ylim(min(data), max(data))
+        self.canvas.draw()
 
 
 if __name__ == "__main__":
@@ -386,4 +326,5 @@ if __name__ == "__main__":
     QtGui.QFontDatabase.addApplicationFont('fonts/segoeui.ttf')
     QtGui.QFontDatabase.addApplicationFont('fonts/segoeuib.ttf')
     window = MainWindow()
+    # window.new_loop()
     sys.exit(app.exec_())
