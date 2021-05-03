@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 from traceback import format_exc
 from typing import Dict
@@ -43,6 +44,7 @@ class MockBinanceManager(BinanceAPIManager):
         """
         Get ticker price of all coins
         """
+        time.sleep(2)
         return FakeAllTickers(self)
 
     def get_fee(self, origin_coin: Coin, target_coin: Coin, selling: bool):
